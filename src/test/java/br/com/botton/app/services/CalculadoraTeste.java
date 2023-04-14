@@ -60,4 +60,12 @@ public class CalculadoraTeste {
         }
     }
 
+    @Test
+    public void deveMultiplicarDoisValores(){
+        int a = 2;
+        int b = 3;
+        Calculadora calculadora = new Calculadora();
+        Assert.assertEquals(6, calculadora.multiplicar(a, b));
+    }
+
 }
