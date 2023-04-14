@@ -12,10 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 import static br.com.botton.app.util.DataUtils.isMesmaData;
@@ -60,7 +57,7 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void testeLocacao_com_assertThat() throws Exception {
+    public void alugarFilmeComSucesso() throws Exception {
         //cenario
         Usuario usuario = new Usuario("Usuario 1");
         filmes = Arrays.asList(new Filme("Filme 1", 2, 5.0));
@@ -76,7 +73,7 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void LocacaoServiceTest() throws Exception {
+    public void alugarFilmeComSucesso2() throws Exception {
 
         //FIRST
 
@@ -94,7 +91,7 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void testeLocacao_filmeSemEstoque() throws LocadoraException {
+    public void naoDeveAlugarFilmeSemEstoque() throws LocadoraException {
         Usuario usuario = new Usuario("Luiz");
         filmes = Arrays.asList(new Filme("Jurassic Park", 0, 5.0));
 
@@ -120,7 +117,7 @@ public class LocacaoServiceTest {
     }*/
 
     @Test
-    public void testLocacao_usuarioVazio_formaRobusta() throws FilmeSemEstoqueException {
+    public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
         //cenario
         filmes = Arrays.asList(new Filme("Jurassic Park", 1, 5.0));
 
@@ -134,7 +131,7 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void testLocacao_FilmeVazio_formaRobusta() throws FilmeSemEstoqueException {
+    public void naoDeveAlugarFilmeNulo() throws FilmeSemEstoqueException {
         //cenario
         Usuario usuario = new Usuario("Luiz");
 
@@ -160,6 +157,32 @@ public class LocacaoServiceTest {
         Locacao locacao = locacaoService.alugarFilme(usuario, null);
 
     }*/
+
+    @Test
+    public void deveDarDesconto75PorCentoNo2oFilme() throws FilmeSemEstoqueException, LocadoraException {
+        //cenario
+        Usuario usuario = new Usuario("Luiz");
+        filmes = Arrays.asList(new Filme("Jurassic Park", 1, 5.0), new Filme("Jurassic Park II", 1, 5.0));
+
+        var valorTotal = service.alugarFilme(usuario, filmes).getValor();
+
+        assertThat(valorTotal, is(8.75d));
+
+    }
+
+    @Test
+    public void deveDarDesconto50PorCentoNo3oFilme() throws FilmeSemEstoqueException, LocadoraException {
+        //cenario
+        //criando um conflito positivo para esse lado
+        Usuario usuario = new Usuario("Luiz");
+        filmes = Arrays.asList(new Filme("Jurassic Park", 1, 5.0),
+                new Filme("Jurassic Park II", 1, 5.0));
+
+        var valorTotal = service.alugarFilme(usuario, filmes).getValor();
+
+        assertThat(valorTotal, is(12.5d));
+
+    }
 
 
 }

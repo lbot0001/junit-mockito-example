@@ -20,11 +20,18 @@ public class LocacaoService {
 			throw new LocadoraException("Filme nao informado");
 		}
 
+		int filmeIndex = 0;
 		for (Filme filme: filmes) {
+			filmeIndex++;
 			if(filme.getEstoque() == 0) {
 				throw new FilmeSemEstoqueException("Filme sem estoque");
 			}
-			valorPrecoLocacaoTotal+=filme.getPrecoLocacao();
+
+			if(filmeIndex == 2){
+				valorPrecoLocacaoTotal+=filme.getPrecoLocacao()*0.75d;
+			} else {
+				valorPrecoLocacaoTotal += filme.getPrecoLocacao();
+			}
 		}
 
 
